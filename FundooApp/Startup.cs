@@ -36,6 +36,8 @@ namespace FundooApp
             services.AddDbContextPool<UserContext>(option => option.UseSqlServer(this.Configuration.GetConnectionString("FundooDB")));
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IUserManager, UserManager>();
+            services.AddTransient<INoteRepository, NoteRepository>();
+            services.AddTransient<INoteManager, NoteManager>();
             //Add Swagger
             services.AddSwaggerGen(c =>
             {

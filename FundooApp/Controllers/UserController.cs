@@ -93,7 +93,7 @@ namespace FundooApp.Controllers
             try
             {
                 var result = this.manager.ForgetPassword(email);
-                if (result.Equals("Email sent to user"))
+                if (result.Equals(true))
                 {
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = "Forget password" });
                 }
@@ -104,7 +104,7 @@ namespace FundooApp.Controllers
             }
             catch (Exception ex)
             {
-                return this.NotFound(new ResponseModel<string>() { Status = false, Message = ex.Message });
+                throw new Exception(ex.Message);
             }
         }
     }
