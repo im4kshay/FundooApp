@@ -25,7 +25,6 @@ namespace RepositoryLayer.Services
             this.Configuration = configuration;
             this.userContext = userContext;
         }
-
         public IConfiguration Configuration { get; }
 
         public async Task<string> Register(RegisterModel data)
