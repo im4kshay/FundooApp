@@ -38,6 +38,8 @@ namespace FundooApp
             services.AddTransient<IUserManager, UserManager>();
             services.AddTransient<INoteRepository, NoteRepository>();
             services.AddTransient<INoteManager, NoteManager>();
+            services.AddTransient<ICollaboratorRepository, CollaboratorRepository>();
+            services.AddTransient<ICollaboratorManager, CollaboratorManager>();
             //Add Swagger
             services.AddSwaggerGen(c =>
             {
