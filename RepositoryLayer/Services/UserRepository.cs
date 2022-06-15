@@ -19,14 +19,12 @@ namespace RepositoryLayer.Services
     public class UserRepository : IUserRepository
     {
         private readonly UserContext userContext;
-
         public UserRepository(IConfiguration configuration, UserContext userContext)
         {
             this.Configuration = configuration;
             this.userContext = userContext;
         }
         public IConfiguration Configuration { get; }
-
         public async Task<string> Register(RegisterModel data)
         {
             try
@@ -49,7 +47,6 @@ namespace RepositoryLayer.Services
                 throw new Exception(ex.Message);
             }
         }
-
         public LoginModel Login(LoginModel userData)
         {
             try
@@ -71,7 +68,6 @@ namespace RepositoryLayer.Services
                 throw new Exception(e.Message);
             }
         }
-
         public static string EncryptPassword(string password)
         {
             try
@@ -86,9 +82,6 @@ namespace RepositoryLayer.Services
                 throw new Exception("Error in Base64Encoding" + e.Message);
             }
         }
-
-    
-
         public async Task<string> ResetPassword(ResetPsModel reset)
         {
             try
@@ -111,7 +104,6 @@ namespace RepositoryLayer.Services
                 throw new Exception(ex.Message);
             }
         }
-
         private bool SendEmail(string email)
         {
             string linkToBeSend = this.ReceiveQueue(email);
@@ -122,8 +114,6 @@ namespace RepositoryLayer.Services
 
             return false;
         }
-
-
         private MessageQueue QueueDetail()
         {
             MessageQueue messageQueue; //provide access to a queue in MSMQ
@@ -138,8 +128,6 @@ namespace RepositoryLayer.Services
             }
             return messageQueue;
         }
-
-
         private void MSMQSend(string url)
         {
             try
@@ -156,8 +144,6 @@ namespace RepositoryLayer.Services
                 throw new Exception(e.Message);
             }
         }
-
-
         private string ReceiveQueue(string email)
         {
             ////for reading from MSMQ
@@ -168,8 +154,6 @@ namespace RepositoryLayer.Services
             string linkToBeSend = receiveMsg.Body.ToString();
             return linkToBeSend;
         }
-
-
         private bool SendMailUsingSMTP(string email, string message)
         {
             MailMessage mailMessage = new MailMessage();
@@ -182,7 +166,7 @@ namespace RepositoryLayer.Services
             smtp.Port = 587; //port no.
             smtp.Host = "smtp.gmail.com";
             smtp.EnableSsl = true; //specify smtpserver use ssl or not, default setting is false
-            smtp.Credentials = new NetworkCredential("akshaysayre8@gmail.com", "Akshay@123");
+            smtp.Credentials = new NetworkCredential("akshaysayre8@gmail.com", "hzeapyzrotswdgbf");
             smtp.Send(mailMessage);
             return true;
         }
