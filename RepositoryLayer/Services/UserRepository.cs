@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using RepositoryLayer.Context;
 using RepositoryLayer.Interface;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -54,9 +55,16 @@ namespace RepositoryLayer.Services
                 var checkEmail = this.userContext.Users.Where(x => x.Email == userData.Email).FirstOrDefault();
                 if (checkEmail != null)
                 {
-                    var checkPass = this.userContext.Users.Where(x => x.Password == EncryptPassword(userData.Password)).FirstOrDefault();
+                    var checkPass = this.userContext.Users.Where(x => x.Password == EncryptPassword(userData.Password)).FirstOrDefault(); // && x.Email == userData.Email
                     if (checkPass != null)
                     {
+
+                        //ConnectionMultiplexer cMultiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
+                        //IDatabase database = cMultiplexer.GetDatabase();
+                        //database.StringSet(key: "First Name", checkPass.FirstName);
+                        //database.StringSet(key: "Last Name", checkPass.LastName);
+                        //database.StringSet(key: "User Id", checkPass.UserId.ToString());
+                        
                         return userData;
                     }
                     return null;
@@ -191,6 +199,5 @@ namespace RepositoryLayer.Services
                 throw new Exception(e.Message);
             }
         }
-        
     }
 }

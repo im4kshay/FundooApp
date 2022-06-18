@@ -1,6 +1,9 @@
 ﻿using BusinessLogicLayer.Interface;
 using CommonLayer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using StackExchange.Redis;
 using System;
 using System.Threading.Tasks;
 
@@ -12,10 +15,11 @@ namespace FundooApp.Controllers
     public class UserController : Controller
     {
         private readonly IUserManager manager;
-
-        public UserController(IUserManager manager)
+        private readonly ILogger<UserController> logger;
+        public UserController(IUserManager manager, ILogger<UserController> logger)
         {
             this.manager = manager;
+            this.logger = logger;
         }
 
         [HttpPost]
@@ -24,14 +28,19 @@ namespace FundooApp.Controllers
         {
             try
             {
+                this.logger.LogInformation("New user added successfully with userid " + userData.UserId + " & firstname:" + userData.FirstName);
+                HttpContext.Session.SetString("User Name ", userData.FirstName + " " + userData.LastName);
+                HttpContext.Session.SetString("User Email ", userData.Email);
                 string result = await this.manager.Register(userData);
-                //this.logger.LogInformation("New user added successfully with userid " + userData.UserId + " & firstname:" + userData.FirstName);
                 if (result.Equals("Registration Succesful"))
                 {
+                    var userName = HttpContext.Session.GetString("User Name");
+                    this.logger.LogInformation("User Name" + userData + result);
                     return this.Ok(new ResponseModel<string>() { Status = true, Message = result });
                 }
                 else
                 {
+                    this.logger.LogInformation(userData.FirstName + " " + userData.LastName + " " + result);
                     return this.BadRequest(new ResponseModel<string>() { Status = false, Message = result });
                 }
             }
@@ -50,7 +59,20 @@ namespace FundooApp.Controllers
                 var result = this.manager.Login(userData);
                 if (result != null)
                 {
-                    string token = this.manager.JWTTokenGeneration(userData.Email);
+                    //ConnectionMultiplexer cMultiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
+                    //IDatabase database = cMultiplexer.GetDatabase();
+                    //string firstName = database.StringGet("First Name");
+                    //string lastnNme = database.StringGet("Last Name");
+                    //int userId = Convert.ToInt32(database.StringGet("User Id"));
+                    //RegisterModel reg = new RegisterModel
+                    //{
+                    //    FirstName = firstName,
+                    //    LastName = lastnNme,
+                    //    Email = userData.Email,
+                    //    UserId = userId
+                    //};
+
+                    string token = this.manager.JWTTokenGeneration(userData.Email); //, result.userId
                     return this.Ok(new { Status = true, Message = "Login Successful", Data = result, Token = token});
                 }
                 else

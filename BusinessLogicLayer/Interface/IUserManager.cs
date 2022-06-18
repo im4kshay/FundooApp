@@ -10,10 +10,8 @@ namespace BusinessLogicLayer.Interface
     {
         Task<string> Register(RegisterModel data);
         LoginModel Login(LoginModel userData);
-
         Task<string> ResetPassword(ResetPsModel reset);
-
         bool ForgetPassword(string email);
-        string JWTTokenGeneration(string email);
+        string JWTTokenGeneration(string email); //, int userId)
     }
 }

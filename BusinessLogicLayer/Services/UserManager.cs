@@ -15,9 +15,6 @@ namespace BusinessLogicLayer.Services
     public class UserManager : IUserManager
     {
         private readonly IUserRepository repository;
-
-    
-
         public IConfiguration Configuration { get; }
         
         public UserManager(IUserRepository repository, IConfiguration configuration)
@@ -72,8 +69,7 @@ namespace BusinessLogicLayer.Services
                 throw new Exception(e.Message);
             }
         }
-
-        public string JWTTokenGeneration(string email)
+        public string JWTTokenGeneration(string email) //, int userId
         {
             byte[] key = Encoding.UTF8.GetBytes(this.Configuration["SecretKey"]); //encrypting secret key
             SymmetricSecurityKey securityKey = new SymmetricSecurityKey(key);
@@ -81,9 +77,10 @@ namespace BusinessLogicLayer.Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, email)
+                    new Claim(ClaimTypes.Name, email),
+                    //new Claim("UserId", userId.ToString())
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(30), //expiry time
+                Expires = DateTime.UtcNow.AddDays(30), //expiry time
                 SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature)
             };
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler(); //creating and validating jwt
