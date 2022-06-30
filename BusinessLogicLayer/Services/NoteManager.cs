@@ -19,11 +19,11 @@ namespace BusinessLogicLayer.Services
             this.repository = repository;
             this.Configuration = configuration;
         }
-        public async Task<NoteModel> CreateNote(NoteModel note)
+        public async Task<NoteModel> CreateNote(NoteModel note, int userId)
         {
             try
             {
-                return await this.repository.CreateNote(note);
+                return await this.repository.CreateNote(note, userId);
             }
             catch (Exception e)
             {

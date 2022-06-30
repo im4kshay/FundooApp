@@ -23,10 +23,21 @@ namespace RepositoryLayer.Services
             this.userContext = userContext;
         }
         public IConfiguration Configuration { get; }
-        public async Task<NoteModel> CreateNote(NoteModel note)
+        public async Task<NoteModel> CreateNote(NoteModel addNote, int userId)
         {
             try
             {
+                var user = userContext.Users.Where(u => u.UserId == userId).FirstOrDefault();
+                NoteModel note = new NoteModel();
+                note.UserId = user.UserId;
+                note.Title = addNote.Title;
+                note.Describe = addNote.Describe;
+                note.Reminder = addNote.Reminder;
+                note.Pinned = addNote.Pinned;
+                note.Archieve = addNote.Archieve;
+                note.Trash = addNote.Trash;
+                note.Colour = addNote.Colour;
+                note.Image = addNote.Image;
                 if (note.Title != null || note.Describe != null)
                 {
                     this.userContext.Notes.Add(note);

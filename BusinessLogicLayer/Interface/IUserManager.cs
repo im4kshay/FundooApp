@@ -9,9 +9,10 @@ namespace BusinessLogicLayer.Interface
     public interface IUserManager
     {
         Task<string> Register(RegisterModel data);
-        LoginModel Login(LoginModel userData);
+        string Login(LoginModel userData);
         Task<string> ResetPassword(ResetPsModel reset);
         bool ForgetPassword(string email);
-        string JWTTokenGeneration(string email); //, int userId)
+
+        //string JWTTokenGeneration(string email); //, int userId)
     }
 }

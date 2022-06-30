@@ -72,8 +72,8 @@ namespace FundooApp.Controllers
                     //    UserId = userId
                     //};
 
-                    string token = this.manager.JWTTokenGeneration(userData.Email); //, result.userId
-                    return this.Ok(new { Status = true, Message = "Login Successful", Data = result, Token = token});
+                    //string token = this.manager.JWTTokenGeneration(userData.Email); //, result.userId
+                    return this.Ok(new { Status = true, Message = "Login Successful", Token = result, Data = userData.Email});
                 }
                 else
                 {

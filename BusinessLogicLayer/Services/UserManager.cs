@@ -34,7 +34,7 @@ namespace BusinessLogicLayer.Services
                 throw new Exception(e.Message);
             }
         }
-        public LoginModel Login(LoginModel userData)
+        public string Login(LoginModel userData)
         {
             try
             {
@@ -69,23 +69,24 @@ namespace BusinessLogicLayer.Services
                 throw new Exception(e.Message);
             }
         }
-        public string JWTTokenGeneration(string email) //, int userId
-        {
-            byte[] key = Encoding.UTF8.GetBytes(this.Configuration["SecretKey"]); //encrypting secret key
-            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(key);
-            SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Name, email),
-                    //new Claim("UserId", userId.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddDays(30), //expiry time
-                SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature)
-            };
-            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler(); //creating and validating jwt
-            JwtSecurityToken token = handler.CreateJwtSecurityToken(descriptor);
-            return handler.WriteToken(token); //write serialize security token to web token
-        }
+
+        //public string JWTTokenGeneration(string email) //, int userId
+        //{
+        //    byte[] key = Encoding.UTF8.GetBytes(this.Configuration["SecretKey"]); //encrypting secret key
+        //    SymmetricSecurityKey securityKey = new SymmetricSecurityKey(key);
+        //    SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor
+        //    {
+        //        Subject = new ClaimsIdentity(new[]
+        //        {
+        //            new Claim(ClaimTypes.Name, email),
+        //            //new Claim("UserId", userId.ToString())
+        //        }),
+        //        Expires = DateTime.UtcNow.AddDays(30), //expiry time
+        //        SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature)
+        //    };
+        //    JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler(); //creating and validating jwt
+        //    JwtSecurityToken token = handler.CreateJwtSecurityToken(descriptor);
+        //    return handler.WriteToken(token); //write serialize security token to web token
+        //}
     }
 }

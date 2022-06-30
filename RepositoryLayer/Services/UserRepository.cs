@@ -48,7 +48,7 @@ namespace RepositoryLayer.Services
                 throw new Exception(ex.Message);
             }
         }
-        public LoginModel Login(LoginModel userData)
+        public string Login(LoginModel userData)
         {
             try
             {
@@ -58,14 +58,33 @@ namespace RepositoryLayer.Services
                     var checkPass = this.userContext.Users.Where(x => x.Password == EncryptPassword(userData.Password)).FirstOrDefault(); // && x.Email == userData.Email
                     if (checkPass != null)
                     {
-
                         //ConnectionMultiplexer cMultiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
                         //IDatabase database = cMultiplexer.GetDatabase();
                         //database.StringSet(key: "First Name", checkPass.FirstName);
                         //database.StringSet(key: "Last Name", checkPass.LastName);
                         //database.StringSet(key: "User Id", checkPass.UserId.ToString());
-                        
-                        return userData;
+
+                        var tokenHandler = new JwtSecurityTokenHandler();
+                        var tokenKey = Encoding.ASCII.GetBytes("THIS_IS_MY_KEY_TO_GENERATE_TOKEN");
+                        var tokenDescriptor = new SecurityTokenDescriptor
+                        {
+                            Subject = new ClaimsIdentity(new Claim[]
+                            {
+                                new Claim("Email", userData.Email),
+                                new Claim("UserId", checkPass.UserId.ToString())
+                            }),
+
+                            Issuer = Configuration["Jwt:Issuer"],//new
+                            Audience = Configuration["Jwt:Audience"],//new
+                            Expires = DateTime.UtcNow.AddDays(90),
+                            SigningCredentials =
+                            new SigningCredentials(
+                                new SymmetricSecurityKey(tokenKey),
+                                SecurityAlgorithms.HmacSha256Signature)
+                        };
+                        var token = tokenHandler.CreateToken(tokenDescriptor);
+                        return tokenHandler.WriteToken(token);
+                        //return userData;
                     }
                     return null;
                 }

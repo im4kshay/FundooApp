@@ -36,8 +36,9 @@ namespace FundooApp.Controllers
         {
             try
             {
-                //int userId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase)));
-                var result = this.manager.CreateNote(mynotes);
+                var claimId = HttpContext.User.Claims.FirstOrDefault(u => u.Type.ToString().Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Convert.ToInt32(claimId.Value);
+                var result = this.manager.CreateNote(mynotes, userId);
                 if (result != null)
                 {
                     return this.Ok(new { Status = true, Message = "Note Created Successfully", Data = result });
@@ -82,12 +83,15 @@ namespace FundooApp.Controllers
             return Ok(NoteList);
         }
 
+        [Authorize]
         [HttpGet]
         [Route("getnotes")]
-        public IActionResult GetNote(int userId)
+        public IActionResult GetNote()
         {
             try
             {
+                var claimId = HttpContext.User.Claims.FirstOrDefault(u => u.Type.ToString().Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
+                int userId = Convert.ToInt32(claimId.Value);
                 var result = this.manager.GetNote(userId);
                 if (result != null)
                 {

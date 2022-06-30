@@ -9,7 +9,7 @@ namespace RepositoryLayer.Interface
     public interface IUserRepository
     {
         Task<string> Register(RegisterModel data);
-        LoginModel Login(LoginModel userData);
+        string Login(LoginModel userData);
         Task<string> ResetPassword(ResetPsModel reset);
         bool ForgetPassword(string email);
     }

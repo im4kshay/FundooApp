@@ -9,7 +9,7 @@ namespace RepositoryLayer.Interface
 {
     public interface INoteRepository
     {
-        Task<NoteModel> CreateNote(NoteModel note);
+        Task<NoteModel> CreateNote(NoteModel note, int userId);
         List<NoteModel> GetNote(int userId);
         Task<NoteModel> EditNote(NoteModel note);
         Task<NoteModel> ChangeColour(NoteModel note);
